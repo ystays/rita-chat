@@ -3,47 +3,37 @@
     <head>
         <title>Chat App</title>
         <link rel="icon" href="/img/favicon.png">
-        <link rel="stylesheet" href="/css/styles.min.css">
+        <link rel="stylesheet" href="/css/styles.css">
+
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            
     </head>
     <body>
+        <div id="buttons" class="ctrl__buttons">
+            <button class="mdc-button mdc-button--raised" id="readyBtn">
+                <i class="material-icons mdc-button__icon" aria-hidden="true">phone_enabled</i>
+                <span class="mdc-button__label">Go online</span>
+            </button>
+            <button class="mdc-button mdc-button--raised" disable id="connectBtn">
+                <i class="material-icons mdc-button__icon" aria-hidden="true">group</i>
+                <span class="mdc-button__label">Start call</span>
+            </button>
+            <button class="mdc-button mdc-button--raised" disabled id="hangupBtn">
+                <i class="material-icons mdc-button__icon" aria-hidden="true">close</i>
+                <span class="mdc-button__label">Hangup</span>
+            </button>
+        </div>
+        
         <div class="chat">
             <div id="sidebar" class="chat__sidebar">
-                <div id="buttons">
-                    <button class="mdc-button mdc-button--raised" disable id="connectBtn">
-                        <i class="material-icons mdc-button__icon" aria-hidden="true">group</i>
-                        <span class="mdc-button__label">Connect to peer</span>
-                    </button>
-                    <button class="mdc-button mdc-button--raised" id="readyBtn">
-                        <i class="material-icons mdc-button__icon" aria-hidden="true">group</i>
-                        <span class="mdc-button__label">Ready to connect</span>
-                    </button>
-                    <button class="mdc-button mdc-button--raised" id="cameraBtn">
-                        <i class="material-icons mdc-button__icon" aria-hidden="true">perm_camera_mic</i>
-                        <span class="mdc-button__label">Open camera & microphone</span>
-                    </button>
-                    <button class="mdc-button mdc-button--raised" disabled id="createBtn">
-                        <i class="material-icons mdc-button__icon" aria-hidden="true">group_add</i>
-                        <span class="mdc-button__label">Create room</span>
-                    </button>
-                    <button class="mdc-button mdc-button--raised" disabled id="joinBtn">
-                        <i class="material-icons mdc-button__icon" aria-hidden="true">group</i>
-                        <span class="mdc-button__label">Join room</span>
-                    </button>
-                    <button class="mdc-button mdc-button--raised" disabled id="hangupBtn">
-                        <i class="material-icons mdc-button__icon" aria-hidden="true">close</i>
-                        <span class="mdc-button__label">Hangup</span>
-                    </button>
-                </div>
                 <div>
                     <span id="currentRoom"></span>
                 </div>
                 
-                <div id="videos">
-                    <video id="localVideo" muted autoplay playsinline></video>
-                    <video id="remoteVideo" autoplay playsinline></video>
-                </div>
-                
             </div>
+
             <div class="chat__main">
                 <div id="messages" class="chat__messages"></div>
 

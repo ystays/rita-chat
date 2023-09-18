@@ -45,19 +45,28 @@ var messageInputBox = null;
 var receiveBox = null;
 
 function init() {
-  // document.querySelector('#cameraBtn').addEventListener('click', openUserMedia);
+  document.querySelector('#cameraBtn').addEventListener('click', openUserMedia);
   document.querySelector('#connectBtn').addEventListener('click', createOffer);
   document.querySelector('#readyBtn').addEventListener('click', receiveOfferAndSendAnswer);
   document.querySelector('#hangupBtn').addEventListener('click', hangUp);
   // document.querySelector('#createBtn').addEventListener('click', createRoom);
   // document.querySelector('#joinBtn').addEventListener('click', joinRoom);
-  // roomDialog = new mdc.dialog.MDCDialog(document.querySelector('#room-dialog'));
+  roomDialog = new mdc.dialog.MDCDialog(document.querySelector('#room-dialog'));
 
-  const $messageForm = document.querySelector("#message-form")
-  messageInputBox = $messageForm.querySelector("input")
-  sendButton = $messageForm.querySelector("button")
+
+  //message_box = document.getElementById('#messageBox');
+  //send_button = document.querySelector('#send-button');
+  document.querySelector('#button').addEventListener('click', sendMessage)
+  sendButton = document.getElementById('sendButton');
+  messageInputBox = document.getElementById('message');
+  receiveBox = document.getElementById('receivebox');
+
 
   sendButton.addEventListener('click', sendMessage, false);
+}
+
+function createRoom() {
+  return
 }
 
 function sendMessage(e) {
@@ -83,11 +92,10 @@ function sendMessage(e) {
 }
 
 async function createOffer() {
-  document.querySelector('#hangupBtn').disabled = false;
-  // if (document.querySelector('#cameraBtn').disabled === false) {
-  //   await openUserMedia();
-  //   document.querySelector('#cameraBtn').disabled = true;
-  // }
+  if (document.querySelector('#cameraBtn').disabled === false) {
+    await openUserMedia();
+    document.querySelector('#cameraBtn').disabled = true;
+  }
   document.querySelector('#connectBtn').disabled = true;
   
   console.log('Create PeerConnection with configuration: ', configuration);
@@ -119,7 +127,7 @@ async function createOffer() {
         messageInputBox.disabled = false;
         messageInputBox.focus();
       } else {
-        //messageInputBox.disabled = true;
+        messageBox.disabled = true;
         sendButton.disabled = true;
       }
     }
@@ -181,11 +189,10 @@ async function createOffer() {
 }
 
 async function receiveOfferAndSendAnswer() {
-  document.querySelector('#hangupBtn').disabled = false;
-  // if (document.querySelector('#cameraBtn').disabled === false) {
-  //   await openUserMedia();
-  //   document.querySelector('#cameraBtn').disabled = true;
-  // }
+  if (document.querySelector('#cameraBtn').disabled === false) {
+    await openUserMedia();
+    document.querySelector('#cameraBtn').disabled = true;
+  }
   document.querySelector('#readyBtn').disabled = true;
 
   console.log('Create PeerConnection with configuration: ', configuration);
@@ -290,11 +297,27 @@ async function receiveOfferAndSendAnswer() {
   })
 }
 
+async function openUserMedia(e) {
+  const stream = await navigator.mediaDevices.getUserMedia(
+    //  {video: true, audio: true});
+    {audio: true});
+  document.querySelector('#localVideo').srcObject = stream;
+  localStream = stream;
+  remoteStream = new MediaStream();
+  document.querySelector('#remoteVideo').srcObject = remoteStream;
+
+  console.log('Stream:', document.querySelector('#localVideo').srcObject);
+  document.querySelector('#cameraBtn').disabled = true;
+  document.querySelector('#joinBtn').disabled = false;
+  document.querySelector('#createBtn').disabled = false;
+  document.querySelector('#hangupBtn').disabled = false;
+}
+
 async function hangUp(e) {
-  // const tracks = document.querySelector('#localVideo').srcObject.getTracks();
-  // tracks.forEach(track => {
-  //   track.stop();
-  // });
+  const tracks = document.querySelector('#localVideo').srcObject.getTracks();
+  tracks.forEach(track => {
+    track.stop();
+  });
 
   if (remoteStream) {
     remoteStream.getTracks().forEach(track => track.stop());
@@ -304,8 +327,11 @@ async function hangUp(e) {
     peerConnection.close();
   }
 
-  //document.querySelector('#joinBtn').disabled = true;
-  //document.querySelector('#createBtn').disabled = true;
+  document.querySelector('#localVideo').srcObject = null;
+  document.querySelector('#remoteVideo').srcObject = null;
+  document.querySelector('#cameraBtn').disabled = false;
+  document.querySelector('#joinBtn').disabled = true;
+  document.querySelector('#createBtn').disabled = true;
   document.querySelector('#hangupBtn').disabled = true;
   document.querySelector('#currentRoom').innerText = '';
 
