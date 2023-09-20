@@ -84,10 +84,6 @@ function sendMessage(e) {
 
 async function createOffer() {
   document.querySelector('#hangupBtn').disabled = false;
-  // if (document.querySelector('#cameraBtn').disabled === false) {
-  //   await openUserMedia();
-  //   document.querySelector('#cameraBtn').disabled = true;
-  // }
   document.querySelector('#connectBtn').disabled = true;
   
   console.log('Create PeerConnection with configuration: ', configuration);
@@ -182,10 +178,6 @@ async function createOffer() {
 
 async function receiveOfferAndSendAnswer() {
   document.querySelector('#hangupBtn').disabled = false;
-  // if (document.querySelector('#cameraBtn').disabled === false) {
-  //   await openUserMedia();
-  //   document.querySelector('#cameraBtn').disabled = true;
-  // }
   document.querySelector('#readyBtn').disabled = true;
 
   console.log('Create PeerConnection with configuration: ', configuration);
