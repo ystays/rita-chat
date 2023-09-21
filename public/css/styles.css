@@ -58,6 +58,26 @@ button:disabled {
 
 /* Join Page Styles */
 
+.homepage-left-div {
+    background: #F5F5F5;
+    width: 100vw;
+    height: 100vh;   
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    float: left;
+}
+
+.right-form {
+    background: #000000;
+    width: 40vw;
+    height: 100vh;   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: right;
+}
+
 .centered-form {
     background: #333744;
     width: 100vw;
@@ -68,10 +88,11 @@ button:disabled {
 }
 
 .centered-form__box {
-    box-shadow: 0px 0px 17px 1px #1D1F26;
-    background: #F7F7FA;
+    /* box-shadow: 0px 0px 17px 1px #BDBDBD; */
+    background: white;
     padding: 24px;
-    width: 250px;
+    width: 225px;
+    align-self: right;
 }
 
 .centered-form button {
@@ -84,6 +105,11 @@ button:disabled {
 }
 
 /* Chat Page Layout */
+
+.container {
+    width: 65%;
+    height: 80%;
+}
 
 .chat {
     display: flex;
@@ -98,7 +124,7 @@ button:disabled {
 }
 
 .ctrl__buttons {
-    background: #333744;
+    background: white;
     /* flex-grow: 1; */
     display: block;
     flex-direction: row;

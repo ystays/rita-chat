@@ -14,7 +14,6 @@ const configuration = {
 };
 
 let peerConnection = null;
-let localStream = null;
 let remoteStream = null;
 let roomDialog = null;
 let roomId = null;
@@ -29,14 +28,6 @@ const URL = "http://localhost:4000";
 //const socket = io(URL, { autoConnect: false });
 const socket = io(URL)
 
-// const input = document.getElementById('input');
-// function sendMessage(e) {
-//   // prevent form submission refreshing page
-//   e.preventDefault();
-//   socket.emit("message", input.value);
-//   input.value = "";
-// }
-
 let message_box = null;
 let send_button = null;
 
@@ -45,7 +36,6 @@ var messageInputBox = null;
 var receiveBox = null;
 
 function init() {
-  // document.querySelector('#cameraBtn').addEventListener('click', openUserMedia);
   document.querySelector('#connectBtn').addEventListener('click', createOffer);
   document.querySelector('#readyBtn').addEventListener('click', receiveOfferAndSendAnswer);
   document.querySelector('#hangupBtn').addEventListener('click', hangUp);
@@ -61,23 +51,13 @@ function init() {
 }
 
 function sendMessage(e) {
+  // prevent form submission refreshing page
   e.preventDefault();
-  // var message = messageBox.value;
-  // console.log(message);
-  // sendChannel.send(message);
-
-  // // Clear the input box and re-focus it, so that we're
-  // // ready for the next message.
-  
-  // messageBox.value = "";
-  // messageBox.focus();
-
   var message = messageInputBox.value;
   sendChannel.send(message);
   
   // Clear the input box and re-focus it, so that we're
   // ready for the next message.
-  
   messageInputBox.value = "";
   messageInputBox.focus();
 }
@@ -90,16 +70,6 @@ async function createOffer() {
   peerConnection = new RTCPeerConnection(configuration);
 
   registerPeerConnectionListeners();
-
-  if (localStream) {
-    console.log("(createOffer) localStream found, adding tracks...")
-    localStream.getTracks().forEach(track => {
-      peerConnection.addTrack(track, localStream);
-    });
-  }
-  else {
-    console.log("no localStream")
-  }
 
   // Create the data channel and establish its event listeners
   sendChannel = peerConnection.createDataChannel("sendChannel");
@@ -141,15 +111,6 @@ async function createOffer() {
   document.querySelector('#currentRoom').innerText = `Current room is ${roomId} - You are the caller.`
   // Code for creating room above
 
-  peerConnection.addEventListener('track', event => {
-    console.log('Got remote track (createOffer):', event.streams[0]);
-    event.streams[0].getTracks().forEach(track => {
-      console.log('Add a track to the remoteStream:', track);
-      remoteStream.addTrack(track);
-    });
-  });
-
-
   socket.on("rtc_answer", async (data) => {
     if (!peerConnection.currentRemoteDescription && data.answer) {
       console.log('Got answer - set remote description: ', data.answer);
@@ -169,7 +130,7 @@ async function createOffer() {
           peerConnection.addIceCandidate(new RTCIceCandidate(evt))
           .catch((e) => console.log("add ICE candidate failed ", e))
         } catch(e) {
-          console.log("no e.candidate: ", e);
+          console.log("no evt.candidate: ", e);
         }
       })
     }
@@ -184,16 +145,6 @@ async function receiveOfferAndSendAnswer() {
   peerConnection = new RTCPeerConnection(configuration);
 
   registerPeerConnectionListeners();
-
-  if (localStream) {
-    console.log("(recvOffer...) localStream found, adding tracks...")
-    localStream.getTracks().forEach(track => {
-      peerConnection.addTrack(track, localStream);
-    });
-  }
-  else {
-    console.log("no localStream")
-  }
 
   peerConnection.ondatachannel = receiveChannelCallback;
   function receiveChannelCallback(event) {
@@ -225,14 +176,6 @@ async function receiveOfferAndSendAnswer() {
     // Here you would do stuff that needs to be done
     // when the channel's status changes.
   }
-
-  peerConnection.addEventListener('track', event => {
-    console.log('Got remote track (recvOffer):', event.streams[0]);
-    event.streams[0].getTracks().forEach(track => {
-      console.log('Add a track to the remoteStream:', track);
-      remoteStream.addTrack(track);
-    });
-  });
 
   // TODO: when remote description received from signaling server
   socket.on("rtc_offer", async (data) => {
